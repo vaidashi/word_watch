@@ -9,5 +9,15 @@ function getTopWord() {
         })
 }
 
+function postWords(word) {
+  $.ajax({
+    url: API + "/api/v1/words",
+    method: "POST",
+    data: { word: { value: word } },
+    success: function(response) {
+      if (response == 'success') {console.log(`${word} added`)} else {console.log("not success")}
+    }
+  })
+}
 
-export {getTopWord}
+export {getTopWord, postWords}
