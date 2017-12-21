@@ -1,5 +1,5 @@
 import $ from 'jquery'
 
-$(document).ready(() => {
-  // have fun!
-})
+const wordAjaxRequests = require("./ajax-requests/word-requests")
+const wordResponseHandlers = require("./response-handlers/word-responses")
+// const wordEventListeners = require("./event-listeners/word-listeners")
