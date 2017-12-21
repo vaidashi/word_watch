@@ -5,9 +5,10 @@ $(document).ready(function(){
 
   $("button").on("click", function(event) {
     var inputtedText = $('textarea').val()
-    var textToArray  = inputtedText.split(" ")
+    // var textToArray  = inputtedText.split(" ")
 
-    debugger 
+    var parseWords = parseText(inputtedText)
+    appendParsedText(parseWords)
 
   })
 
@@ -20,3 +21,24 @@ $(document).ready(function(){
 // Then I should see text appear on the right side of the page
 // With each word from the paragraph only shown once
 // and the size of each word is relative to its frequency in the paragraph.
+
+
+function parseText(incomingText) {
+  var wordCount = {}
+  var splitWords = incomingText.split(" ")
+
+  $.each(splitWords, function(i, word) {
+    if (wordCount[word]) {
+      wordCount[word] += 1
+    } else {
+      wordCount[word] = 1
+    }
+  })
+  return wordCount
+}
+
+function appendParsedText(parsedWords) {
+  $.each(parsedWords, function( key, value ) {
+    $('.word-count').append('<p><font size="' + value + 'em">' + key + '</font></p>')
+  });
+}

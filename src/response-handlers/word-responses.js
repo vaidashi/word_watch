@@ -18,6 +18,9 @@ $(document).ready(function(){
 function listTopWord(topWord) {
   var word = Object.keys(topWord["word"])
   var count = Object.values(topWord["word"])
-  
-  $('.top-word').append('<h4>' + word + '(count:' + count + ')</h4>')
+
+  // $('.top-word').append('<h4>' + word + '(count:' + count + ')</h4>')
+
+  $('h3').append(`<h6>${word} - count: ${count}</h6>`)
+
 }

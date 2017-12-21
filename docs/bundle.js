@@ -10350,7 +10350,7 @@ function getTopWord() {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(3);
-module.exports = __webpack_require__(5);
+module.exports = __webpack_require__(6);
 
 
 /***/ }),
@@ -10365,7 +10365,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 const wordAjaxRequests = __webpack_require__(1)
 const wordResponseHandlers = __webpack_require__(4)
-// const wordEventListeners = require("./event-listeners/word-listeners")
+const wordEventListeners = __webpack_require__(5)
 
 
 /***/ }),
@@ -10393,7 +10393,13 @@ $(document).ready(function(){
 
 
 function listTopWord(topWord) {
-  console.log(topWord)
+  var word = Object.keys(topWord["word"])
+  var count = Object.values(topWord["word"])
+
+  // $('.top-word').append('<h4>' + word + '(count:' + count + ')</h4>')
+
+  $('h3').append(`<h6>${word} - count: ${count}</h6>`)
+
 }
 
 
@@ -10401,10 +10407,60 @@ function listTopWord(topWord) {
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
+const $ = __webpack_require__(0)
+
+
+$(document).ready(function(){
+
+  $("button").on("click", function(event) {
+    var inputtedText = $('textarea').val()
+    // var textToArray  = inputtedText.split(" ")
+
+    var parseWords = parseText(inputtedText)
+    appendParsedText(parseWords)
+
+  })
+
+})
+
+// As a user
+// when I visit Word Watch
+// and paste a paragraph into the "Paste text here" textarea
+// and I click "Break down"
+// Then I should see text appear on the right side of the page
+// With each word from the paragraph only shown once
+// and the size of each word is relative to its frequency in the paragraph.
+
+
+function parseText(incomingText) {
+  var wordCount = {}
+  var splitWords = incomingText.split(" ")
+
+  $.each(splitWords, function(i, word) {
+    if (wordCount[word]) {
+      wordCount[word] += 1
+    } else {
+      wordCount[word] = 1
+    }
+  })
+  return wordCount
+}
+
+function appendParsedText(parsedWords) {
+  $.each(parsedWords, function( key, value ) {
+    $('.word-count').append('<p><font size="' + value + 'em">' + key + '</font></p>')
+  });
+}
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(6);
+var content = __webpack_require__(7);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -10412,7 +10468,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(8)(content, options);
+var update = __webpack_require__(9)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -10429,10 +10485,10 @@ if(false) {
 }
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(7)(undefined);
+exports = module.exports = __webpack_require__(8)(undefined);
 // imports
 exports.push([module.i, "@import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700);", ""]);
 
@@ -10443,7 +10499,7 @@ exports.push([module.i, "/* http://meyerweb.com/eric/tools/css/reset/ \n   v2.0 
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports) {
 
 /*
@@ -10525,7 +10581,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -10571,7 +10627,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(9);
+var	fixUrls = __webpack_require__(10);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -10884,7 +10940,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports) {
 
 
