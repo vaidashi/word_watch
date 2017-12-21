@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -10330,6 +10330,7 @@ return jQuery;
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getTopWord", function() { return getTopWord; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "postWords", function() { return postWords; });
 const $ = __webpack_require__(0)
 const API = "https://wordwatch-api.herokuapp.com"
 
@@ -10341,39 +10342,27 @@ function getTopWord() {
         })
 }
 
+function postWords(word) {
+  $.ajax({
+    url: API + "/api/v1/words",
+    method: "POST",
+    data: { word: { value: word } },
+    success: function(response) {
+      if (response == 'success') {console.log(`${word} added`)} else {console.log("not success")}
+    }
+  })
+}
 
 
 
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(3);
-module.exports = __webpack_require__(6);
-
-
-/***/ }),
-/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
-
-
-const wordAjaxRequests = __webpack_require__(1)
-const wordResponseHandlers = __webpack_require__(4)
-const wordEventListeners = __webpack_require__(5)
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "appendParsedText", function() { return appendParsedText; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ajax_requests_word_requests__ = __webpack_require__(1);
 const $ = __webpack_require__(0)
 
@@ -10391,45 +10380,71 @@ $(document).ready(function(){
 })
 
 
-
 function listTopWord(topWord) {
   var word = Object.keys(topWord["word"])
   var count = Object.values(topWord["word"])
 
-  // $('.top-word').append('<h4>' + word + '(count:' + count + ')</h4>')
-
-  $('h3').append(`<h6>${word} - count: ${count}</h6>`)
-
+  $('h3').append(`<h6>${word}  (count: ${count})</h6>`)
 }
+
+function appendParsedText(parsedWords) {
+  $.each(parsedWords, function( key, value ) {
+    $('.word-count').append('<p><font size="' + value + 'em">' + key + '</font></p>')
+  });
+}
+
+
+
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(4);
+module.exports = __webpack_require__(6);
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
+
+
+const wordAjaxRequests = __webpack_require__(1)
+const wordResponseHandlers = __webpack_require__(2)
+const wordEventListeners = __webpack_require__(5)
 
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ajax_requests_word_requests__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__response_handlers_word_responses__ = __webpack_require__(2);
 const $ = __webpack_require__(0)
+
+
 
 
 $(document).ready(function(){
 
   $("button").on("click", function(event) {
-    var inputtedText = $('textarea').val()
-    // var textToArray  = inputtedText.split(" ")
+    var inputtedText = $('textarea').val().toLowerCase()
+    var textToArray  = inputtedText.split(" ")
 
     var parseWords = parseText(inputtedText)
-    appendParsedText(parseWords)
-
+    Object(__WEBPACK_IMPORTED_MODULE_1__response_handlers_word_responses__["appendParsedText"])(parseWords)
+    sendWords(textToArray)
   })
 
 })
-
-// As a user
-// when I visit Word Watch
-// and paste a paragraph into the "Paste text here" textarea
-// and I click "Break down"
-// Then I should see text appear on the right side of the page
-// With each word from the paragraph only shown once
-// and the size of each word is relative to its frequency in the paragraph.
 
 
 function parseText(incomingText) {
@@ -10446,10 +10461,11 @@ function parseText(incomingText) {
   return wordCount
 }
 
-function appendParsedText(parsedWords) {
-  $.each(parsedWords, function( key, value ) {
-    $('.word-count').append('<p><font size="' + value + 'em">' + key + '</font></p>')
-  });
+
+function sendWords(words) {
+  $.each(words, function (i, word) {
+    Object(__WEBPACK_IMPORTED_MODULE_0__ajax_requests_word_requests__["postWords"])(word)
+  })
 }
 
 
